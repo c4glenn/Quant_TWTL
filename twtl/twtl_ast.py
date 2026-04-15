@@ -10,10 +10,9 @@
 
 from antlr4 import InputStream, CommonTokenStream
 
-from twtlLexer import twtlLexer
-from twtlParser import twtlParser
-from twtlVisitor import twtlVisitor
-from ordered_set import OrderedSet as oset
+from .twtlLexer import twtlLexer
+from .twtlParser import twtlParser
+from .twtlVisitor import twtlVisitor
 
 
 class Operation(object):

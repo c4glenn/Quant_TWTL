@@ -16,15 +16,13 @@ import scipy
 from scipy.interpolate import interp1d
 from antlr4 import InputStream, CommonTokenStream
 
-from twtlLexer import twtlLexer
-from twtlParser import twtlParser
-from twtl_ast import TWTLAbstractSyntaxTreeExtractor, to_ast
-from twtl_ast import Operation as Op
-from twtl_ast import RelOperation
-from twtl2dfa import twtl2dfa
-from dfa import setDFAType, DFAType, setOptimizationFlag
-from util import _debug_pprint_tree
-from ordered_set import OrderedSet as oset
+from .twtlLexer import twtlLexer
+from .twtlParser import twtlParser
+from .twtl_ast import TWTLAbstractSyntaxTreeExtractor, to_ast
+from .twtl_ast import Operation as Op
+from .twtl_ast import RelOperation
+from .dfa import setDFAType, DFAType, setOptimizationFlag
+# from ordered_set import OrderedSet as oset
 import copy
 
 
@@ -250,7 +248,7 @@ def translate(ast, kind='both', norm=False, optimize=True):
     # ast = TWTLAbstractSyntaxTreeExtractor().visit(t)
     
 
-    alphabet = ast.propositions(oset([]))  # set of predicates / propositions
+    alphabet = ast.propositions(set())# oset([]))  # set of predicates / propositions
     result = [alphabet]
 
 
