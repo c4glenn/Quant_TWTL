@@ -211,7 +211,7 @@ def norm(formula: str):
     list[int, int]
         [lower_bound, upper_bound]
     '''
-    return to_ast(formula).bounds()
+    return to_ast(formula).robustness_time_bounds()
 
 def translate(ast, kind='both', norm=False, optimize=True):
     '''Converts a TWTL formula into an FSA. It can returns both a normal FSA or

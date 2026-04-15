@@ -119,32 +119,50 @@ class TWTLFormula(object):
     # Structural queries
     # ------------------------------------------------------------------
 
-    def bounds(self):
+    def robustness_time_bounds(self):
         '''Computes the (lower, upper) time bounds of the TWTL formula.
 
         Returns [lower_bound, upper_bound].
         '''
         if self.op == Operation.AND:
-            lb, rb = self.left.bounds(), self.right.bounds()
+            lb, rb = self.left.robustness_time_bounds(), self.right.robustness_time_bounds()
             self.bounds_vls = [max(lb[0], rb[0]), max(lb[1], rb[1])]
         elif self.op == Operation.OR:
-            lb, rb = self.left.bounds(), self.right.bounds()
+            lb, rb = self.left.robustness_time_bounds(), self.right.robustness_time_bounds()
             self.bounds_vls = [min(lb[0], rb[0]), max(lb[1], rb[1])]
         elif self.op == Operation.NOT:
-            self.bounds_vls = self.child.bounds()
+            self.bounds_vls = self.child.robustness_time_bounds()
         elif self.op == Operation.HOLD:
             self.bounds_vls = [self.duration, self.duration]
         elif self.op == Operation.CONCAT:
-            lb, rb = self.left.bounds(), self.right.bounds()
+            lb, rb = self.left.robustness_time_bounds(), self.right.robustness_time_bounds()
             self.bounds_vls = [1 + lb[0] + rb[0], 1 + lb[1] + rb[1]]
         elif self.op == Operation.WITHIN:
-            cb = self.child.bounds()
+            cb = self.child.robustness_time_bounds()
             assert cb[0] <= self.high - self.low, \
                 'Child formula is unfeasible within the given time window'
             self.bounds_vls = [self.low + cb[0], self.high]
         elif self.op == Operation.PRED:
             self.bounds_vls = [0, 0]
         return self.bounds_vls
+    
+    def bounds(self):
+        match self.op:
+            case Operation.AND | Operation.OR:
+                lb, rb = self.left.bounds(), self.right.bounds()
+                return [min(lb[0], rb[0]), max(lb[1], rb[1])]
+            case Operation.NOT: return self.child.bounds()
+            case Operation.HOLD: return [0, self.duration]
+            case Operation.CONCAT:
+                lb, rb = self.left.bounds(), self.right.bounds()
+                return [lb[0], lb[1] + rb[1]]
+            case Operation.WITHIN:
+                cb = self.child.bounds()
+                assert cb[0] <= self.high - self.low, \
+                'Child formula is unfeasible within the given time window'
+                return [self.low + cb[0], self.high]
+            case Operation.PRED: return [0, 0]
+            case _: raise ValueError(f"bounds is not defined for Operation {Operation.getName(self.op)}")
 
     def variables(self):
         '''Returns the set of signal variable names referenced in the formula.
@@ -395,5 +413,5 @@ if __name__ == '__main__':
     ast = to_ast(test_formula)
     print('Formula  :', test_formula)
     print('AST      :', str(ast))
-    print('Bounds   :', ast.bounds())
+    print('Bounds   :', ast.robustness_time_bounds())
     print('Variables:', ast.variables())
