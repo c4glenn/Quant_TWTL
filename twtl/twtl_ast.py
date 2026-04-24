@@ -160,7 +160,7 @@ class TWTLFormula(object):
                 cb = self.child.bounds()
                 assert cb[0] <= self.high - self.low, \
                 'Child formula is unfeasible within the given time window'
-                return [self.low + cb[0], self.high]
+                return [self.low, self.high + cb[1]]
             case Operation.PRED: return [0, 0]
             case _: raise ValueError(f"bounds is not defined for Operation {Operation.getName(self.op)}")
 
