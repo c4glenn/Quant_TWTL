@@ -276,7 +276,7 @@ class TWTLAbstractSyntaxTreeExtractor(twtlVisitor):
     Mirrors STLAbstractSyntaxTreeExtractor in PyTeLo's stl.py.
     '''
 
-    def visitFormula(self, ctx):
+    def visitFormula(self, ctx) -> TWTLFormula:
         if ctx.op is None:
             op = Operation.PRED
         elif ctx.op.text == '(':
@@ -401,7 +401,7 @@ def to_ast(formula: str) -> TWTLFormula:
     tokens = CommonTokenStream(lexer)
     parser = twtlParser(tokens)
     phi    = parser.formula()
-    return TWTLAbstractSyntaxTreeExtractor().visit(phi)
+    return TWTLAbstractSyntaxTreeExtractor().visitFormula(phi)
 
 
 # ---------------------------------------------------------------------------

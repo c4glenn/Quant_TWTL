@@ -194,6 +194,13 @@ class twtlParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitFormula" ):
                 listener.exitFormula(self)
+                
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExpr" ):
+                return visitor.visitExpr(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -223,7 +230,7 @@ class twtlParser ( Parser ):
                 self.state = 16
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la==20:
+                if _la==twtlParser.HOLD:
                     self.state = 13
                     localctx.op = self.match(twtlParser.HOLD)
                     self.state = 14
@@ -235,7 +242,7 @@ class twtlParser ( Parser ):
                 self.state = 19
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la==19:
+                if _la==twtlParser.NOT:
                     self.state = 18
                     localctx.negated = self.match(twtlParser.NOT)
 
@@ -384,6 +391,13 @@ class twtlParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitNf" ):
                 listener.exitNf(self)
+                
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitNf" ):
+                return visitor.visitNf(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -469,6 +483,7 @@ class twtlParser ( Parser ):
         return localctx
 
 
+
     class BooleanExprContext(ParserRuleContext):
         __slots__ = 'parser'
 
@@ -505,6 +520,14 @@ class twtlParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitBooleanExpr" ):
                 listener.exitBooleanExpr(self)
+                
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitBooleanExpr" ):
+                return visitor.visitBooleanExpr(self)
+            else:
+                return visitor.visitChildren(self)
+
+
 
 
 
@@ -592,6 +615,14 @@ class twtlParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitExpr" ):
                 listener.exitExpr(self)
+                
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExpr" ):
+                return visitor.visitExpr(self)
+            else:
+                return visitor.visitChildren(self)
+
+
 
 
 
