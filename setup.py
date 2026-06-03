@@ -10,9 +10,10 @@ setup(
     packages=find_packages(),
     python_requires='>=3.7',
     install_requires=[
-        'antlr4-python3-runtime==4.7.1',
+        'antlr4-python3-runtime==4.13.2',
         'numpy>=1.21',
         'scipy>=1.7',
         'ordered-set>=4.0',
+        'networkx>=3.6.0'
     ],
 )
